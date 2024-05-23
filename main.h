@@ -3,7 +3,7 @@ enum STATE {MAIN, INPUT, SEARCH, SELECT, INFO, SAVELOAD};
 typedef struct subject
 {
     char name[50];
-    int id;
+    char tag[50];
     Subject** childs;
     int child_count;
     Subject** parents;
@@ -47,21 +47,31 @@ int is_valid(Timetable* timetable); // Check if the timetable is valid
 
 
 // RELATED TO MAIN
-int main_screen();
+void main_screen(enum STATE* pstate);
 
 // RELATED TO INPUT
-int input_screen(); // use create_subject, append_subject
+void input_screen(enum STATE* pstate); // use create_subject, append_subject
 
 // RELATED TO SEARCH
-int search_screen(); // SEARCH -> SELECT -> INFO
+void search_screen(enum STATE* pstate); // SEARCH -> SELECT -> INFO
+// > select_screen
 char* search_interface();
 int select_interface(char* search); // RETURNS THE ID
 
+// RELATED TO SELECT
+void select_screen(enum STATE* pstate);
+// > info_screen
+
 // RELATED TO INFO
-int info_screen(Subject* subject);
+void info_screen(Subject* subject, enum STATE* pstate); // use delete, change, follow
 void add_prereq_interface(Subject* child); // select parent using search & select interface, then add prereq
 void delete_prereq_interface(Subject* child); // select parent using search & select interface, then delete prereq
 void add_to_timetable(Subject* subject, Timetable* timetable, int semester); // add to timetable
 
+// interface of INFO
+// void free_subject(Subject* subject); (in // Subjects)
+void change_subject_interface(Subject* subject); // changes info or parents
+Subject** follow_parent_screen(Subject* subject, enum STATE* pstate); // return array of pointer to SELECT
+
 // RELATED TO SAVELOAD AND SETTINGS
-int saveload_screen();
+void saveload_screen(enum STATE* pstate); // SAVEs and LOADs file
