@@ -4,10 +4,14 @@
 
 enum STATE {MAIN, INPUT, SEARCH, SELECT, INFO, FOLLOW, SAVELOAD};
 
+
+enum STATE state;
+Map map={NULL, 0};
+
 int main(void)
 {
 
-    enum STATE state;
+
 
     Subject* subject_to_call;
     Subject** select_array;
@@ -17,19 +21,19 @@ int main(void)
         switch (state)
         {
             case MAIN:
-                main_screen(&state); break;
+                main_screen(); break;
             case INPUT:
-                input_screen(&state); break;
+                input_screen(); break;
             case SEARCH:
-                search_screen(&state); break;
+                select_array = search_screen(); break;
             case SELECT:
-                select_screen(&state); break;
+                subject_to_call = select_screen(select_array); break;
             case INFO:
-                info_screen(subject_to_call, &state); break;
+                info_screen(subject_to_call); break;
             case FOLLOW:
-                select_array = follow_parent_screen(subject_to_call, &state); break;
+                select_array = follow_parent_screen(subject_to_call); break;
             case SAVELOAD:
-                saveload_screen(&state); break;
+                saveload_screen(); break;
 
             default: return 1;
         }
@@ -43,14 +47,22 @@ main_screen()
     input_screen()
     search_screen()  // strin 이용하여 pointer배열 반환?
         select_screen() // pointer배열에서 선택 (?번째)
-            info_screen() // 선택한 Subject
-                delete
+            info_screen() // 선택한 Subject의 info
+                free
                 change
-                follow parent
+                follow_parent
     saveload_screen()
 */
 
-void main_screen(enum STATE* pstate)
+void main_screen()
 {
-    return SELECT;
+    return INPUT;
+    return SEARCH;
+    return SAVELOAD;
+}
+
+Subject** follow_parent_screen(Subject* subject)
+{
+    
+    state = SELECT;
 }
