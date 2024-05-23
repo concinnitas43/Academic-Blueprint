@@ -2,7 +2,8 @@
   "files.associations": {
     "typeinfo": "cpp",
     "chrono": "cpp",
-    "main.h": "c"
+    "main.h": "c",
+    "stdio.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

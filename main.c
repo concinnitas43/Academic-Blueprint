@@ -19,23 +19,21 @@ int main(void)
 
     switch (state)
     {
-        case MAIN: main_screen(); break;
-        case INPUT: input_screen(); break;
-        case SEARCH: search_screen(); break;
-        case SELECT: select_screen(); break;
-        case INFO: info_screen(); break;
-        case SAVELOAD: saveload_screen(); break;
+        case MAIN:
+            state = main_screen(); break;
+        case INPUT:
+            state = input_screen(); break;
+        case SEARCH:
+            state = search_screen(); break;
+        case SELECT:
+            state = select_screen(); break;
+        case INFO:
+            state = info_screen(); break;
+        case SAVELOAD:
+            state = saveload_screen(); break;
 
         default: return 1;
 
     }
 
 }
-
-void main_screen()
-{
-
-
-
-}
-
