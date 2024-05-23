@@ -16,7 +16,6 @@ int main(void)
     enum STATE state;
 
 
-
     switch (state)
     {
         case MAIN:
