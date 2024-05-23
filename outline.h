@@ -54,7 +54,7 @@ void input_screen(); // use create_subject, append_subject
 // RELATED TO SEARCH
 void search_screen(); // SEARCH -> SELECT -> INFO
 char* search_interface();
-int select_interface(); // RETURNS THE ID
+int select_interface(char* search); // RETURNS THE ID
 
 // RELATED TO INFO
 void info_screen(Subject* subject);
