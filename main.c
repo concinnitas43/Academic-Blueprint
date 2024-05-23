@@ -8,7 +8,7 @@ typedef struct
     int id;
 } subject;
 
-enum STATE {MAIN, INPUT, SEARCH, SELECT, INFO, SAVELOAD};
+enum STATE {MAIN, INPUT, SEARCH, SELECT, SAVELOAD};
 
 int main(void)
 {
@@ -26,8 +26,8 @@ int main(void)
             state = search_screen(); break;
         case SELECT:
             state = select_screen(); break;
-        case INFO:
-            state = info_screen(); break;
+        // case INFO:
+        //     state = info_screen(); break;
         case SAVELOAD:
             state = saveload_screen(); break;
 
@@ -35,4 +35,21 @@ int main(void)
 
     }
 
+}
+
+/*
+main_screen()
+    input_screen()
+    search_screen()
+        select_screen()
+            info_screen()
+                delete
+                change
+                follow parent
+    saveload_screen()
+*/
+
+int main_screen()
+{
+    return SELECT;
 }

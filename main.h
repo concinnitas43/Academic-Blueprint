@@ -45,16 +45,6 @@ void save_map(Map* map, char* filename);
 
 int is_valid(Timetable* timetable); // Check if the timetable is valid
 
-/*
-main_screen()
-    input_screen()
-    search_screen()
-        select_screen()
-            delete
-            change
-            follow parent
-    saveload_screen()
-*/
 
 // RELATED TO MAIN
 int main_screen();
