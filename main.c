@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "main.h"
 
 typedef struct {
     char name[50];
@@ -8,19 +9,12 @@ typedef struct {
 
 enum STATE {MAIN, INPUT, SEARCH, SELECT, INFO, SAVELOAD};
 
-void main_screen();
-void input_screen();
-void search_screen();
-void select_screen();
-void info_screen();
-void saveload_screen();
-
 int main(void)
 {
 
     enum STATE state;
 
-    
+
 
     switch (state)
     {
@@ -38,6 +32,8 @@ int main(void)
 }
 
 void main_screen() {
+
+
 
 }
 
