@@ -1,6 +1,7 @@
 enum STATE {MAIN, INPUT, SEARCH, SELECT, INFO, SAVELOAD};
 
-typedef struct subject {
+typedef struct subject
+{
     char name[50];
     int id;
     subject** childs;
@@ -9,12 +10,14 @@ typedef struct subject {
     int parent_count;
 } Subject;
 
-typedef struct map {
+typedef struct map
+{
     Subject* subjects;
     int size;
 } Map;
 
-typedef struct timetable {
+typedef struct timetable
+{
     Subject* semesters[6];
 } Timetable;
 

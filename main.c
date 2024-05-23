@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "main.h"
 
-typedef struct {
+typedef struct
+{
     char name[50];
     char tag[50];
     int id;
@@ -31,7 +32,8 @@ int main(void)
 
 }
 
-void main_screen() {
+void main_screen()
+{
 
 
 
