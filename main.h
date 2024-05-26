@@ -36,16 +36,16 @@ void delete_node(Subject* subject, Map* map); // Need to Free!
 
 int name_search(char* name, Map* map, int * search_result); //Returns the number of search results, might need another function to define this one recursively
 
-int check_cycle(Subject* parent, Subject* child); // Parent, Child를 서로 연결을 했을 때 Returns 1 if there is a cycle, 0 if not
+int check_cycle(Subject* subject); // after connect Parent subject with Child subject, Returns 1 if there is a cycle start with parent subject, 0 if not(by dfs)
 int add_prereq(Subject* parent, Subject* child); // add them both ways (return 0), if already exists (return 1), do nothing. if there is a cycle, return 2
-int remove_prereq(Subject* parent, Subject* child); // remove them both ways, if not exists, do nothing
+int remove_prereq(Subject* parent, Subject* child); // remove them both ways(return 0), if not exists(return -1), do nothing
 
 void load_map(Map* map, char* filename);
 void save_map(Map* map, char* filename);
 
-int is_valid(Timetable* timetable); // Check if the timetable is valid
-
-
+int is_valid(int type1, Subject** subject); // Check if the timetable is valid(return 0) if not(return -1)
+int exceed_subjects(Timetable* timetable); //check if the timetable exceed the maximum number of subjects each semester(return 0) if not (return all exceeding semesters(ex 125))
+Subject** possible_semester(Timetable* timetable); // check if all subjects are possible to register at that semester(return None) if not (return the array of impossible subjects)
 // RELATED TO MAIN
 void main_screen();
 
@@ -71,7 +71,8 @@ void add_to_timetable(Subject* subject, Timetable* timetable, int semester); // 
 // interface of INFO
 // void free_subject(Subject* subject); (in // Subjects)
 void change_subject_interface(Subject* subject); // changes info or parents
-Subject** follow_parent_screen(Subject* subject); // return array of pointer to SELECT
+Subject** follow_parent_screen(Subject* subject); // return array of parent pointer to SELECT
+Subject** follow_child_screen(Subject* subject); // return array of child pointer to SELECT
 
 // RELATED TO SAVELOAD AND SETTINGS
 void saveload_screen(); // SAVEs and LOADs file
