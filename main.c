@@ -2,7 +2,7 @@
 #include "main.h"
 
 
-enum STATE {MAIN, INPUT, SEARCH, SELECT, INFO, FOLLOW, SAVELOAD};
+// enum STATE {MAIN, INPUT, SEARCH, SELECT, INFO, FOLLOW, SAVELOAD};
 
 
 enum STATE state;
@@ -54,6 +54,11 @@ main_screen()
     saveload_screen()
 */
 
+
+// *****************
+// jiyeon 
+
+// RELATED TO MAIN
 void main_screen()
 {
     return INPUT;
@@ -61,8 +66,37 @@ void main_screen()
     return SAVELOAD;
 }
 
-Subject** follow_parent_screen(Subject* subject)
+
+
+
+// RELATED TO INPUT
+void input_screen(); // use create_subject, append_subject
+
+// RELATED TO SEARCH
+Subject** search_screen(); // SEARCH -> SELECT -> INFO
+// > select_screen
+char* search_interface();
+int select_interface(char* search); // RETURNS THE ID
+
+// RELATED TO SELECT
+Subject* select_screen(Subject** subject_array);
+// > info_screen
+
+// RELATED TO INFO
+void info_screen(Subject* subject); // use delete, change, follow
+void add_prereq_interface(Subject* child); // select parent using search & select interface, then add prereq
+void delete_prereq_interface(Subject* child); // select parent using search & select interface, then delete prereq
+void add_to_timetable(Subject* subject, Timetable* timetable, int semester); // add to timetable
+
+// interface of INFO
+// void free_subject(Subject* subject); (in // Subjects)
+void change_subject_interface(Subject* subject); // changes info or parents
+Subject** follow_parent_screen(Subject* subject) // return array of parent pointer to SELECT
 {
     
     state = SELECT;
 }
+Subject** follow_child_screen(Subject* subject); // return array of child pointer to SELECT
+
+// RELATED TO SAVELOAD AND SETTINGS
+void saveload_screen(); // SAVEs and LOADs file
