@@ -6,12 +6,10 @@
 
 
 enum STATE state;
-Map map={NULL, 0};
+Map subject_map={NULL, 0};
 
 int main(void)
 {
-
-
 
     Subject* subject_to_call;
     Subject** select_array;
@@ -61,42 +59,122 @@ main_screen()
 // RELATED TO MAIN
 void main_screen()
 {
-    return INPUT;
-    return SEARCH;
-    return SAVELOAD;
+    printf("hi, this is the main screen.\n");
+    printf("menu:\n");
+    printf("\tinput subject: 0\n");
+    printf("\tsearch subject: 1\n");
+    printf("\tsave & load: 2\n");
+    printf("input: ");
+    int st=-1;
+    scanf("%d", &st);
+    switch(st){
+        case 0:
+            state = INPUT;
+            break;
+        case 1:
+            state = SEARCH;
+            break;
+        case 2:
+            state = SAVELOAD;
+            break;
+        default:
+            printf("input ERROR. loading main screen again...\n");
+            state = MAIN;
+    }
+    return;
 }
 
 
 
 
 // RELATED TO INPUT
-void input_screen(); // use create_subject, append_subject
+void input_screen()
+{
+    printf("hi, this is the input screen.\n");
+    printf("menu:\n\tinput subject: 0\n\tgo back to main screen: -1\n");
+    printf("input: ");
+    int st=-1; // select screen
+    scanf("%d", &st);
+    if(st!=0) // back to main
+    {
+        state = MAIN;
+        return;
+    }
+    char name[50], tag[50]; // input name, tag
+    printf("name? ");
+    scanf("%s", name);
+    printf("tag? ");
+    scanf("%s", tag);
+    int osize = subject_map.size; // old size of subject map
+    Subject *newsub = create_subject(name, tag, osize); // create new subject and get pointer
+    append_subject(&subject_map, newsub); // append new subject in subject map
+    state = MAIN; // go to MAIN next
+    if(osize + 1 == subject_map.size){ // if size of map increased properly
+        printf("subject successfully added.\n");
+        return;
+    }
+    printf("ERROR on adding subject.\n"); // if else
+    return;
+} // use create_subject, append_subject
 
 // RELATED TO SEARCH
-Subject** search_screen(); // SEARCH -> SELECT -> INFO
+Subject** search_screen()
+{
+    return NULL;
+} // SEARCH -> SELECT -> INFO
 // > select_screen
-char* search_interface();
-int select_interface(char* search); // RETURNS THE ID
+char* search_interface()
+{
+    return NULL;
+}
+int select_interface(char* search)
+{
+    return 0;
+} // RETURNS THE ID
 
 // RELATED TO SELECT
-Subject* select_screen(Subject** subject_array);
+Subject* select_screen(Subject** subject_array)
+{
+    return NULL;
+}
 // > info_screen
 
 // RELATED TO INFO
-void info_screen(Subject* subject); // use delete, change, follow
-void add_prereq_interface(Subject* child); // select parent using search & select interface, then add prereq
-void delete_prereq_interface(Subject* child); // select parent using search & select interface, then delete prereq
-void add_to_timetable(Subject* subject, Timetable* timetable, int semester); // add to timetable
+void info_screen(Subject* subject)
+{
+    return;
+} // use delete, change, follow
+void add_prereq_interface(Subject* child)
+{
+    return;
+} // select parent using search & select interface, then add prereq
+void delete_prereq_interface(Subject* child)
+{
+    return;
+} // select parent using search & select interface, then delete prereq
+void add_to_timetable(Subject* subject, Timetable* timetable, int semester)
+{
+    return;
+} // add to timetable
 
 // interface of INFO
 // void free_subject(Subject* subject); (in // Subjects)
-void change_subject_interface(Subject* subject); // changes info or parents
-Subject** follow_parent_screen(Subject* subject) // return array of parent pointer to SELECT
+void change_subject_interface(Subject* subject)
 {
-    
-    state = SELECT;
-}
-Subject** follow_child_screen(Subject* subject); // return array of child pointer to SELECT
+    return;
+} // changes info or parents
+Subject** follow_parent_screen(Subject* subject)
+{
+    return NULL;    
+    // state = SELECT;
+} // return array of parent pointer to SELECT
+Subject** follow_child_screen(Subject* subject)
+{
+    return NULL;
+} // return array of child pointer to SELECT
 
 // RELATED TO SAVELOAD AND SETTINGS
-void saveload_screen(); // SAVEs and LOADs file
+void saveload_screen()
+{
+    return;
+} // SAVEs and LOADs file

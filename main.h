@@ -4,16 +4,16 @@ typedef struct subject
 {
     char name[50];
     char tag[50];
-    Subject** childs;
+    struct subject ** childs;
     int child_count;
-    Subject** parents;
+    struct subject ** parents;
     int parent_count;
 } Subject;
 
 typedef struct map
 {
     Subject* subjects;
-    int size;
+    int size; // 1개가 1개 (index는 -1 해아함)
 } Map;
 
 typedef struct timetable
@@ -23,7 +23,8 @@ typedef struct timetable
 
 // Subjects
 
-Subject* create_subject(char* name, int id); // Implement using malloc
+Subject* create_subject(char* name, char* tag, int id); // Implement using malloc
+// 함수 안에서 map.size ++; 해줘야함
 void append_subject(Map* map, Subject* subject); // Implement using realloc
 void free_subject(Subject* subject);
 void free_map(Map* map);
