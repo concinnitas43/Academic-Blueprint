@@ -12,7 +12,7 @@ typedef struct subject
 
 typedef struct map
 {
-    Subject* subjects;
+    Subject* subjects; // subjects가 
     int size; // 1개가 1개 (index는 -1 해아함)
 } Map;
 
@@ -24,8 +24,8 @@ typedef struct timetable
 // Subjects
 
 Subject* create_subject(char* name, char* tag, int id); // Implement using malloc
-// 함수 안에서 map.size ++; 해줘야함
 void append_subject(Map* map, Subject* subject); // Implement using realloc
+// > 함수 안에서 map.size ++; 해줘야함
 void free_subject(Subject* subject);
 void free_map(Map* map);
 void append_to_timetable(Timetable* timetable, Subject* subject, int semester); // Implement using malloc
@@ -58,10 +58,10 @@ void main_screen();
 void input_screen(); // use create_subject, append_subject
 
 // RELATED TO SEARCH
-Subject** search_screen(); // SEARCH -> SELECT -> INFO
+Subject** search_screen(Map* map); // SEARCH -> SELECT -> INFO
 // > select_screen
-char* search_interface();
-int select_interface(char* search); // RETURNS THE ID
+// char* search_interface();
+int select_interface(int index); // RETURNS THE ID
 
 // RELATED TO SELECT
 Subject* select_screen(Subject** subject_array);
