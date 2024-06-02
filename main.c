@@ -55,6 +55,89 @@ main_screen()
 */
 
 
+// Subjects
+
+Subject* create_subject(char* name, char* tag, int id)
+{
+    return NULL;
+} // Implement using malloc
+void append_subject(Map* map, Subject* subject)
+{
+    return;
+} // Implement using realloc
+// > 함수 안에서 map.size ++; 해줘야함
+void free_subject(Subject* subject)
+{
+    return;
+}
+void free_map(Map* map)
+{
+    return;
+}
+void append_to_timetable(Timetable* timetable, Subject* subject, int semester)
+{
+    return;
+} // Implement using malloc
+void remove_from_timetable(Timetable* timetable, Subject* subject, int semester)
+{
+    return;
+} // Implement using free
+void free_timetable(Timetable* timetable)
+{
+    return;
+}
+
+void print_map(Map* map, int depth)
+{
+    return;
+} // depth is needed for recursion
+void delete_node(Subject* subject, Map* map)
+{
+    return;
+} // Need to Free!
+
+int name_search(char* name, Map* map, int * search_result)
+{
+    return 0;
+} //Returns the number of search results, might need another function to define this one recursively
+
+int check_cycle(Subject* subject)
+{
+    return 0;
+} // after connect Parent subject with Child subject, Returns 1 if there is a cycle start with parent subject, 0 if not(by dfs)
+int add_prereq(Subject* parent, Subject* child)
+{
+    return 0;
+} // add them both ways (return 0), if already exists (return 1), do nothing. if there is a cycle, return 2
+int remove_prereq(Subject* parent, Subject* child)
+{
+    return 0;
+} // remove them both ways(return 0), if not exists(return -1), do nothing
+
+void load_map(Map* map, char* filename)
+{
+    return;
+}
+void save_map(Map* map, char* filename)
+{
+    return;
+}
+
+int is_valid(int type1, Subject** subject)
+{
+    return 0;
+} // Check if the timetable is valid(return 0) if not(return all error semesters(ex 2345))
+int exceed_subjects(Timetable* timetable)
+{
+    return 0;
+} //check if the timetable exceed the maximum number of subjects each semester(return 0) if not (return all exceeding semesters(ex 125))
+Subject** possible_semester(Timetable* timetable)
+{
+    return NULL;
+} // check if all subjects are possible to register at that semester(return None) if not (return the array of impossible subjects)
+
+
+
 // *****************
 // jiyeon 
 
@@ -132,7 +215,7 @@ Subject** search_screen(Map* map)
     if(st!=0) // back to main
     {
         state = MAIN;
-        return;
+        return NULL;
     }
 
     Subject **pointers = (Subject **) malloc(sizeof(Subject *));
