@@ -24,14 +24,20 @@ int main(void)
                 main_screen(); break;
             case INPUT:
                 input_screen(); break;
-            case SEARCH:
-                select_array = search_screen(&subject_map); break;
-            case SELECT:
-                subject_to_call = select_screen(select_array); break;
+            // case SEARCH:
+            //     select_array = search_screen(&subject_map); break;
+            // case SELECT:
+            //     subject_to_call = select_screen(select_array); break;
             case INFO:
-                info_screen(subject_to_call); break;
-            case FOLLOW:
-                select_array = follow_parent_screen(subject_to_call); break;
+                info_screen(); break;
+            // case CHANGE:
+            //     change_subject_screen(subject_to_call); break;
+            // case FOLLOW:
+            //     follow_screen(subject_to_call); break;
+            // case FOLLOW_p:
+            //     select_array = follow_parent_screen(subject_to_call); break;
+            // case FOLLOW_c:
+            //     select_array = follow_child_screen(subject_to_call); break;
             case SAVELOAD:
                 saveload_screen(); break;
 
@@ -66,10 +72,7 @@ void append_subject(Map* map, Subject* subject)
     return;
 } // Implement using realloc
 // > 함수 안에서 map.size ++; 해줘야함
-void free_subject(Subject* subject)
-{
-    return;
-}
+// void free_subject(Subject* subject);
 void free_map(Map* map)
 {
     return;
@@ -87,14 +90,11 @@ void free_timetable(Timetable* timetable)
     return;
 }
 
-void print_map(Map* map, int depth)
+void print_map(Map* map)
 {
     return;
 } // depth is needed for recursion
-void delete_node(Subject* subject, Map* map)
-{
-    return;
-} // Need to Free!
+// void delete_node(Subject* subject, Map* map); // Need to Free!
 
 int name_search(char* name, Map* map, int * search_result)
 {
@@ -152,12 +152,13 @@ void main_screen()
     printf("user input: ");
     int st=-1;
     scanf("%d", &st);
-    switch(st){
+    switch(st)
+    {
         case 0:
             state = INPUT;
             break;
         case 1:
-            state = SEARCH;
+            state = INFO;
             break;
         case 2:
             state = SAVELOAD;
@@ -233,8 +234,7 @@ Subject** search_screen(Map* map)
         }
     }
     pointers[searched_size]=NULL;
-
-    state = SELECT;
+    
     return pointers;
 } // SEARCH -> SELECT -> INFO
 // > select_screen
@@ -258,10 +258,17 @@ int select_interface(int index)
 } // RETURNS THE ID
 
 // RELATED TO SELECT
-Subject* select_screen(Subject** subject_array)
+Subject* select_screen()
 {
+    Subject** subject_array = search_screen(&subject_map);
+    if(subject_array==NULL)
+    {
+        return NULL;
+    }
+
     int index=0;
 
+    printf("\n");
     while(subject_array[index]!=NULL)
     {
         printf("index %d: ", index);
@@ -270,8 +277,8 @@ Subject* select_screen(Subject** subject_array)
     }
 
     if(index==0){
-        printf("search ERROR. search again...\n");
-        state = SEARCH;
+        printf("search ERROR.\n");
+        state = MAIN;
         return NULL;
     }
 
@@ -279,48 +286,247 @@ Subject* select_screen(Subject** subject_array)
     int sel_index = select_interface(index);
 
     printf("%s selected.\n", subject_array[sel_index]->name);
+    state = INFO;
     return subject_array[sel_index];
 }
 // > info_screen
 
+Subject* select_in_array(Subject** subject_array, int count)
+{
+    int index=0;
+
+    printf("\n");
+    while(index<count)
+    {
+        printf("index %d: ", index);
+        printf("name: %s tag: %s\n", subject_array[index]->name, subject_array[index]->tag);
+        index++;
+    }
+
+    int sel_index = select_interface(index);
+    printf("%s selected.\n", subject_array[sel_index]->name);
+
+    return subject_array[sel_index];
+}
+
 // RELATED TO INFO
-void info_screen(Subject* subject)
+void info_screen()
+{
+    Subject* subject = select_screen();
+    if(subject == NULL)
+    {
+        return;
+    }
+
+    info_interface(subject);
+    return;
+} // use delete, change, follow
+
+void info_print(Subject* subject)
 {
     printf("\nsubject info:\n");
     printf("name: %s tag: %s\n", subject->name, subject->tag);
-    
-    // delete, change, follow
+    print_subject_map(subject, 0);
+}
 
-    return;
-} // use delete, change, follow
-void add_prereq_interface(Subject* child)
+void info_interface(Subject* subject)
 {
+    info_print(subject);
+    // delete, change, follow
+    printf("\ninfo screen menu:\n");
+    printf("\tdelete: 0\n\tchange: 1\n\tfollow: 2\n\tgo back to main screen: else\n");
+    printf("user input: ");
+    int st=-1;
+    scanf("%d", &st);
+    switch(st)
+    {
+        case 0:
+            delete_subject(subject);
+            if(subject->id!=-1 || strcmp(subject->name, "")!=0 || strcmp(subject->tag, "")!=0)
+            {
+                printf("ERROR. loading info screen again...\n");
+                break;
+            }
+            printf("subject deleted. loading main screen...\n");
+            state = MAIN;
+            break;
+        case 1:
+            change_subject_screen(subject);
+            if(state == INFO)
+            {
+                printf("changed info\n");
+                info_print(subject);
+            }
+            state = MAIN;
+            break;
+        case 2:
+            follow_screen(subject);
+            break;
+        default:
+            printf("loading main screen...\n");
+            state = MAIN;
+    }
     return;
-} // select parent using search & select interface, then add prereq
-void delete_prereq_interface(Subject* child)
-{
-    return;
-} // select parent using search & select interface, then delete prereq
+}
+
 void add_to_timetable(Subject* subject, Timetable* timetable, int semester)
 {
     return;
 } // add to timetable
 
 // interface of INFO
-// void free_subject(Subject* subject); (in // Subjects)
-void change_subject_interface(Subject* subject)
+void delete_subject(Subject *subject)
 {
+    subject->id=-1;
+    strcpy(subject->name, "");
+    strcpy(subject->tag, "");
+    for(int i=0; i<(subject->parent_count); i++)
+    {
+        remove_prereq((subject->parents)[i], subject);
+    }
+    for(int i=0; i<(subject->child_count); i++)
+    {
+        remove_prereq(subject, (subject->childs)[i]);
+    }
+    return;
+}
+
+// void free_subject(Subject* subject); (in // Subjects)
+void change_subject_screen(Subject* subject)
+{
+    printf("\nhi, this is the change subject screen.\n");
+    printf("change subject screen menu:\n\tchange name: 0\n\tchange tag: 1\n\tadd parents: 2\n\tadd childs: 3\n\tchange parents: 4\n\tchange childs: 5\n\tgo back to main screen: else\n");
+    printf("user input: ");
+    int st=-1;
+    scanf("%d", &st);
+
+    switch(st)
+    {
+        case 0:
+            change_name(subject);
+            printf("name changed to %s\n", subject->name);
+            break;
+        case 1:
+            change_tag(subject);
+            printf("tag changed to %s\n", subject->tag);
+            break;
+        case 2:
+            add_parent(subject);
+            break;
+        case 3:
+            add_child(subject);
+            break;
+        case 4:
+            delete_parent(subject);
+            break;
+        case 5:
+            delete_child(subject);
+            break;
+        default:
+            printf("loading main screen...");
+            state = MAIN;
+    }
     return;
 } // changes info or parents
-Subject** follow_parent_screen(Subject* subject)
+
+void change_name(Subject* subject)
 {
-    return NULL;    
-    // state = SELECT;
-} // return array of parent pointer to SELECT
-Subject** follow_child_screen(Subject* subject)
+    char name[50];
+    printf("\nnew name for subject %s? ", subject->name);
+    scanf("%s", name);
+    strcpy(subject->name, name);
+    return;
+}
+void change_tag(Subject* subject)
 {
-    return NULL;
-} // return array of child pointer to SELECT
+    char tag[50];
+    printf("\nnew tag for subject %s?(existing tag %s) ", subject->name, subject->tag);
+    scanf("%s", tag);
+    strcpy(subject->tag, tag);
+    return;
+}
+
+void add_parent(Subject* subject)
+{
+    Subject* subject_add = select_screen();
+    if(subject_add == NULL)
+    {
+        return;
+    }
+
+    add_prereq(subject_add, subject);
+    return;
+}
+void add_child(Subject* subject)
+{
+    Subject* subject_add = select_screen();
+    if(subject_add == NULL)
+    {
+        return;
+    }
+
+    add_prereq(subject, subject_add);
+    return;
+}
+void delete_parent(Subject* subject)
+{
+    Subject* subject_delete = select_in_array(subject->parents, subject->parent_count);
+    if(subject_delete == NULL)
+    {
+        return;
+    }
+
+    remove_prereq(subject_delete, subject);
+    return;
+}
+void delete_child(Subject* subject)
+{
+    Subject* subject_delete = select_in_array(subject->parents, subject->parent_count);
+    if(subject_delete == NULL)
+    {
+        return;
+    }
+
+    remove_prereq(subject, subject_delete);
+    return;
+}
+
+void follow_screen(Subject* subject)
+{
+    printf("\nhi, this is the follow screen.\n");
+    printf("follow screen menu:\n\tfollow parent: 0\n\tfollow child: 1\n\tgo back to main screen: else\n");
+    int st=-1;
+    printf("user input: ");
+    scanf("%d", &st);
+
+    switch(st)
+    {
+        case 0:
+            state = INFO;
+            if((subject->parent_count)<=0)
+            {
+                printf("No parent to follow\n");
+                state = MAIN;
+                break;
+            }
+            info_interface(select_in_array(subject->parents, subject->parent_count));
+            break;
+        case 1:
+            state = INFO;
+            if((subject->child_count)<=0)
+            {
+                printf("No child to follow\n");
+                state = MAIN;
+                break;
+            }
+            info_interface(select_in_array(subject->childs, subject->child_count));
+            break;
+        default:
+            printf("loading main screen...\n");
+            state = MAIN;
+    }
+    return;
+}
 
 // RELATED TO SAVELOAD AND SETTINGS
 void saveload_screen()
