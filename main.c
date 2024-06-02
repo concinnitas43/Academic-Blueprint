@@ -94,6 +94,11 @@ void print_map(Map* map)
 {
     return;
 } // depth is needed for recursion
+void print_subject_map(Subject* subject, int depth)
+{
+    return;
+} // subject 내의 Subject ** parents, childs 이용하여 재귀적으로?
+
 // void delete_node(Subject* subject, Map* map); // Need to Free!
 
 int name_search(char* name, Map* map, int * search_result)

@@ -34,6 +34,7 @@ void remove_from_timetable(Timetable* timetable, Subject* subject, int semester)
 void free_timetable(Timetable* timetable);
 
 void print_map(Map* map); // depth is needed for recursion
+void print_subject_map(Subject* subject, int depth); // subject 내의 Subject ** parents, childs 이용하여 재귀적으로?
 // void delete_node(Subject* subject, Map* map); // Need to Free!
 
 int name_search(char* name, Map* map, int * search_result); //Returns the number of search results, might need another function to define this one recursively
@@ -73,6 +74,9 @@ Subject* select_in_array(Subject** subject_array, int count); // used to delete 
 void info_screen(); // use delete, change, follow
 // void add_prereq_interface(Subject* child); // select parent using search & select interface, then add prereq
 // void delete_prereq_interface(Subject* child); // select parent using search & select interface, then delete prereq
+
+void info_print(Subject* subject);
+void info_interface(Subject* subject);
 
 // >> add_parent, child / delete_parent, child 로 구현
 
