@@ -144,12 +144,12 @@ Subject** possible_semester(Timetable* timetable)
 // RELATED TO MAIN
 void main_screen()
 {
-    printf("hi, this is the main screen.\n");
-    printf("menu:\n");
+    printf("\nhi, this is the main screen.\n");
+    printf("main screen menu:\n");
     printf("\tinput subject: 0\n");
     printf("\tsearch subject: 1\n");
     printf("\tsave & load: 2\n");
-    printf("input: ");
+    printf("user input: ");
     int st=-1;
     scanf("%d", &st);
     switch(st){
@@ -173,9 +173,9 @@ void main_screen()
 // RELATED TO INPUT
 void input_screen()
 {
-    printf("hi, this is the input screen.\n");
-    printf("menu:\n\tinput subject: 0\n\tgo back to main screen: else\n");
-    printf("input: ");
+    printf("\nhi, this is the input screen.\n");
+    printf("input screen menu:\n\tinput subject: 0\n\tgo back to main screen: else\n");
+    printf("user input: ");
     int st=-1; // select screen
     scanf("%d", &st);
     if(st!=0) // back to main
@@ -207,9 +207,9 @@ Subject** search_screen(Map* map)
     int s_size = s_map.size; // search screen의 map size
     Subject *s_subjects = s_map.subjects; // search screen의 subjects 배열
 
-    printf("hi, this is the search screen.\n");
-    printf("menu:\n\tsearch subject: 0\n\tgo back to main screen: else\n");
-    printf("input: ");
+    printf("\nhi, this is the search screen.\n");
+    printf("search screen menu:\n\tsearch subject: 0\n\tgo back to main screen: else\n");
+    printf("user input: ");
     int st=-1; // select screen
     scanf("%d", &st);
     if(st!=0) // back to main
@@ -244,7 +244,7 @@ Subject** search_screen(Map* map)
 // }
 int select_interface(int index)
 {
-    printf("select index. ");
+    printf("\nselect index. (range %d to %d) ", 0, index-1);
     int sel_index=-1; // select index
     scanf("%d", &sel_index);
 
@@ -261,7 +261,6 @@ int select_interface(int index)
 Subject* select_screen(Subject** subject_array)
 {
     int index=0;
-    printf("hi, this is the select screen.\n");
 
     while(subject_array[index]!=NULL)
     {
@@ -270,6 +269,13 @@ Subject* select_screen(Subject** subject_array)
         index++;
     }
 
+    if(index==0){
+        printf("search ERROR. search again...\n");
+        state = SEARCH;
+        return NULL;
+    }
+
+    printf("\nhi, this is the select screen.\n");
     int sel_index = select_interface(index);
 
     printf("%s selected.\n", subject_array[sel_index]->name);
@@ -280,7 +286,7 @@ Subject* select_screen(Subject** subject_array)
 // RELATED TO INFO
 void info_screen(Subject* subject)
 {
-    printf("subject info:\n");
+    printf("\nsubject info:\n");
     printf("name: %s tag: %s\n", subject->name, subject->tag);
     
     // delete, change, follow
