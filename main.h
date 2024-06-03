@@ -1,24 +1,31 @@
+#define MAX_SUBJECTS 100
+#define MAX_CHILDREN 100
+#define MAX_PARENTS 100
+#define NUM_SEMESTERS 9
+
 enum STATE {MAIN, INPUT, SEARCH, SELECT, INFO, SAVELOAD};
 
 typedef struct subject
 {
     char name[50];
     char tag[50];
-    Subject** childs;
+    int id;
+
+    Subject* childs[MAX_CHILDREN];
     int child_count;
-    Subject** parents;
+    Subject* parents[MAX_PARENTS];
     int parent_count;
+
 } Subject;
 
 typedef struct map
 {
-    Subject* subjects;
-    int size;
+    Subject subjects[MAX_SUBJECTS];
 } Map;
 
 typedef struct timetable
 {
-    Subject* semesters[6];
+    Map semesters[NUM_SEMESTERS];
 } Timetable;
 
 // Subjects
@@ -27,6 +34,7 @@ Subject* create_subject(char* name, int id); // Implement using malloc
 void append_subject(Map* map, Subject* subject); // Implement using realloc
 void free_subject(Subject* subject);
 void free_map(Map* map);
+Timetable* create_timetable();
 void append_to_timetable(Timetable* timetable, Subject* subject, int semester); // Implement using malloc
 void remove_from_timetable(Timetable* timetable, Subject* subject, int semester); // Implement using free
 void free_timetable(Timetable* timetable);
