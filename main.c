@@ -89,10 +89,10 @@ void free_timetable(Timetable* timetable)
     return;
 }
 
-void print_map(Map* map)
-{
-    return;
-} // depth is needed for recursion
+// void print_map(Map* map)
+// {
+//     return;
+// } // depth is needed for recursion
 void print_subject_map(Subject* subject, int depth)
 {
     return;
@@ -158,20 +158,20 @@ void free_map(Map* map)
     free(map->subjects);
 }
 
-Timetable* create_timetable()
-{
-    Timetable* new_timetable = (Timetable*)malloc(sizeof(Timetable));
-    if (new_timetable == NULL)
-    {
-        printf("Memory allocation failed\n");
-        return NULL;
-    }
-    for (int i=0; i<6; i++)
-    {
-        new_timetable->semesters[i] = NULL;
-    }
-    return new_timetable;
-}
+// Timetable* create_timetable()
+// {
+//     Timetable* new_timetable = (Timetable*)malloc(sizeof(Timetable));
+//     if (new_timetable == NULL)
+//     {
+//         printf("Memory allocation failed\n");
+//         return NULL;
+//     }
+//     for (int i=0; i<6; i++)
+//     {
+//         new_timetable->semesters[i] = NULL;
+//     }
+//     return new_timetable;
+// }
 
 void append_to_timetable(Timetable* timetable, Subject* subject, int semester) // Implement using malloc
 {
