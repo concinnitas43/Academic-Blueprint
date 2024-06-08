@@ -1,151 +1,224 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "subject.h"
 #include "timetable.h"
 
 // Subjects
 
-Subject* create_subject(char* name, char* tag, int id)
-{
-    return NULL;
-} // Implement using malloc
-
-void append_subject(Map* map, Subject* subject)
-{
-    return;
-} // Implement using realloc
-// > 함수 안에서 map.size ++; 해줘야함
-// void free_subject(Subject* subject);
-
-void free_map(Map* map)
-{
-    return;
-}
-void append_to_timetable(Timetable* timetable, Subject* subject, int semester)
-{
-    return;
-} // Implement using malloc
-void remove_from_timetable(Timetable* timetable, Subject* subject, int semester)
-{
-    return;
-} // Implement using free
-void free_timetable(Timetable* timetable)
-{
-    return;
-}
-
-// void print_map(Map* map)
-// {
-//     return;
-// } // depth is needed for recursion
-void print_subject_map(Subject* subject, int depth)
-{
-    return;
-} // subject 내의 Subject ** parents, childs 이용하여 재귀적으로?
-
-// void delete_node(Subject* subject, Map* map); // Need to Free!
-
-int name_search(char* name, Map* map, int * search_result)
-{
-    return 0;
-} //Returns the number of search results, might need another function to define this one recursively
-
-int check_cycle(Subject* subject)
-{
-    return 0;
-} // after connect Parent subject with Child subject, Returns 1 if there is a cycle start with parent subject, 0 if not(by dfs)
-int add_prereq(Subject* parent, Subject* child)
-{
-    return 0;
-} // add them both ways (return 0), if already exists (return 1), do nothing. if there is a cycle, return 2
-int remove_prereq(Subject* parent, Subject* child)
-{
-    return 0;
-} // remove them both ways(return 0), if not exists(return -1), do nothing
-
-void load_map(Map* map, char* filename)
-{
-    return;
-}
-
-Subject* create_subject(char* name, int id) // Implement using malloc
-{
+// Subject 초기화 함수
+Subject* create_subject(int id, const char* name, const char* tag) {
     Subject* new_subject = (Subject*)malloc(sizeof(Subject));
-    if (new_subject == NULL)
-    {
-        printf("Memory allocation failed\n");
-        return NULL;
-    }
-    strcpy(new_subject->name, name);
-    strcpy(new_subject->tag, "");
     new_subject->id = id;
-    new_subject->childs = NULL;
-    new_subject->child_count = 0;
+    strcpy(new_subject->name, name);
+    strcpy(new_subject->tag, tag);  // 태그 설정
     new_subject->parents = NULL;
+    new_subject->childs = NULL;
     new_subject->parent_count = 0;
+    new_subject->child_count = 0;
     return new_subject;
 }
 
-void append_subject(Map* map, Subject* subject) // Implement using realloc
-{
-    map->size++;
-    map->subjects = (Subject*)realloc(map->subjects, sizeof(Subject)*map->size);
-    map->subjects[map->size-1] = *subject;
+// Map 출력 함수
+void print_map(Map* map) {
+    for (int i = 0; i < map->size; i++) {
+        printf("ID: %d, Name: %s, Tag: %s\n", map->subjects[i]->id, map->subjects[i]->name, map->subjects[i]->tag);
+    }
 }
 
-void free_subject(Subject* subject)
-{
+// 비교 함수
+int compare_subjects(const void* a, const void* b) {
+    Subject* subjectA = *(Subject**)a;
+    Subject* subjectB = *(Subject**)b;
+    return (subjectA->id - subjectB->id);
+}
+
+// Map 생성 함수
+Map* create_map(Subject** subjects, int num_subjects) {
+    Map* map = (Map*)malloc(sizeof(Map));
+    map->subjects = (Subject**)malloc(num_subjects * sizeof(Subject*));
+    memcpy(map->subjects, subjects, num_subjects * sizeof(Subject*));
+    map->size = num_subjects;
+    qsort(map->subjects, num_subjects, sizeof(Subject*), compare_subjects);
+    return map;
+}
+
+// 선행 과목 추가 함수
+int add_prereq(Subject* child, Subject* parent) {
+    // 이미 선행 과목 관계가 존재하는지 확인
+    for (int i = 0; i < child->parent_count; i++) {
+        if (child->parents[i] == parent) {
+            return 1; // 이미 존재하는 관계
+        }
+    }
+
+    child->parent_count++;
+    child->parents = (Subject**)realloc(child->parents, child->parent_count * sizeof(Subject*));
+    child->parents[child->parent_count - 1] = parent;
+
+    parent->child_count++;
+    parent->childs = (Subject**)realloc(parent->childs, parent->child_count * sizeof(Subject*));
+    parent->childs[parent->child_count - 1] = child;
+
+    // 사이클 발생 여부 확인
+    if (check_cycle(parent)) {
+        // 추가한 관계를 원복
+        child->parent_count--;
+        parent->child_count--;
+
+        // 부모에서 마지막 추가된 자식 제거
+        child->parents = (Subject**)realloc(child->parents, child->parent_count * sizeof(Subject*));
+        parent->childs = (Subject**)realloc(parent->childs, parent->child_count * sizeof(Subject*));
+
+        return 2; // 사이클 발생
+    }
+
+    return 0; // 성공적으로 추가됨
+}
+
+// 선행 과목 제거 함수
+int remove_prereq(Subject* child, Subject* parent) {
+    int parent_found = 0;
+    int child_found = 0;
+
+    // 부모에서 자식 제거
+    for (int i = 0; i < parent->child_count; i++) {
+        if (parent->childs[i] == child) {
+            parent_found = 1;
+            for (int j = i; j < parent->child_count - 1; j++) {
+                parent->childs[j] = parent->childs[j + 1];
+            }
+            parent->child_count--;
+            parent->childs = (Subject**)realloc(parent->childs, parent->child_count * sizeof(Subject*));
+            break;
+        }
+    }
+
+    // 자식에서 부모 제거
+    for (int i = 0; i < child->parent_count; i++) {
+        if (child->parents[i] == parent) {
+            child_found = 1;
+            for (int j = i; j < child->parent_count - 1; j++) {
+                child->parents[j] = child->parents[j + 1];
+            }
+            child->parent_count--;
+            child->parents = (Subject**)realloc(child->parents, child->parent_count * sizeof(Subject*));
+            break;
+        }
+    }
+
+    return (parent_found && child_found) ? 0 : -1; // 성공적으로 제거됨
+}
+
+// 구조체 해제 함수
+void free_subject(Subject* subject) {
+    free(subject->parents);
+    free(subject->childs);
     free(subject);
 }
 
-void free_map(Map* map)
-{
-    free(map->subjects);
+// 큐 정의
+typedef struct Queue {
+    Subject **subjects;
+    int front;
+    int rear;
+    int capacity;
+} Queue;
+
+// 큐 초기화 함수
+Queue* create_queue(int capacity) {
+    Queue* queue = (Queue*)malloc(sizeof(Queue));
+    queue->subjects = (Subject**)malloc(capacity * sizeof(Subject*));
+    queue->front = 0;
+    queue->rear = 0;
+    queue->capacity = capacity;
+    return queue;
 }
 
-// Timetable* create_timetable()
-// {
-//     Timetable* new_timetable = (Timetable*)malloc(sizeof(Timetable));
-//     if (new_timetable == NULL)
-//     {
-//         printf("Memory allocation failed\n");
-//         return NULL;
-//     }
-//     for (int i=0; i<6; i++)
-//     {
-//         new_timetable->semesters[i] = NULL;
-//     }
-//     return new_timetable;
-// }
-
-void append_to_timetable(Timetable* timetable, Subject* subject, int semester) // Implement using malloc
-{
-
-}
-void remove_from_timetable(Timetable* timetable, Subject* subject, int semester); // Implement using free
-void free_timetable(Timetable* timetable);
-
-void print_map(Map* map); // depth is needed for recursion
-void delete_node(Subject* subject, Map* map); // Need to Free!
-
-int name_search(char* name, Map* map, int * search_result); //Returns the number of search results, might need another function to define this one recursively
-void load_map(Map* map, char* filename);
-void save_map(Map* map, char* filename);
-void save_map(Map* map, char* filename)
-{
-    return;
+// 큐 삽입 함수
+void enqueue(Queue* queue, Subject* subject) {
+    if (queue->rear == queue->capacity) {
+        queue->capacity *= 2;
+        queue->subjects = (Subject**)realloc(queue->subjects, queue->capacity * sizeof(Subject*));
+    }
+    queue->subjects[queue->rear++] = subject;
 }
 
-int is_valid(int type1, Subject** subject)
-{
-    return 0;
-} // Check if the timetable is valid(return 0) if not(return all error semesters(ex 2345))
-int exceed_subjects(Timetable* timetable)
-{
-    return 0;
-} //check if the timetable exceed the maximum number of subjects each semester(return 0) if not (return all exceeding semesters(ex 125))
-Subject** possible_semester(Timetable* timetable)
-{
-    return NULL;
-} // check if all subjects are possible to register at that semester(return None) if not (return the array of impossible subjects)
+// 큐 삭제 함수
+Subject* dequeue(Queue* queue) {
+    if (queue->front == queue->rear) {
+        return NULL;
+    }
+    return queue->subjects[queue->front++];
+}
 
+// 큐가 비어있는지 확인하는 함수
+int is_empty(Queue* queue) {
+    return queue->front == queue->rear;
+}
+
+// 사이클 감지 함수
+int check_cycle(Subject* subject) {
+    Queue* queue = create_queue(10); // 큐 초기화
+    enqueue(queue, subject); // 초기 과목을 큐에 추가
+
+    // 방문 여부를 추적하기 위한 해시 테이블 크기
+    int visited_size = 100;
+    Subject** visited = (Subject**)calloc(visited_size, sizeof(Subject*));
+
+    while (!is_empty(queue)) {
+        Subject* current = dequeue(queue); // 큐에서 과목을 하나 꺼냄
+
+        // 이미 방문한 노드인지 확인
+        for (int i = 0; i < visited_size; i++) {
+            if (visited[i] == current) { // 현재 과목이 이미 방문한 과목이라면
+                if (current == subject) { // 그리고 그 과목이 시작 과목이라면
+                    free(queue->subjects); // 메모리 해제
+                    free(queue);
+                    free(visited);
+                    return 1; // 사이클이 발견됨
+                }
+                break;
+            }
+        }
+
+        // 방문하지 않은 노드라면 방문 표시
+        for (int i = 0; i < visited_size; i++) {
+            if (visited[i] == NULL) {
+                visited[i] = current; // 방문한 과목 배열에 추가
+                break;
+            }
+        }
+
+        // 부모 과목을 큐에 추가
+        for (int i = 0; i < current->parent_count; i++) {
+            enqueue(queue, current->parents[i]);
+        }
+    }
+
+    free(queue->subjects); // 메모리 해제
+    free(queue);
+    free(visited);
+    return 0; // 사이클이 발견되지 않음
+}
+
+// Subject Map 출력 함수
+void print_subject_map(Subject* subject, int depth) {
+    if (depth < 0 || subject == NULL) {
+        return;
+    }
+    
+    // 출력 들여쓰기
+    for (int i = 0; i < depth; i++) {
+        printf("  ");
+    }
+    
+    // 현재 과목 출력
+    printf("ID: %d, Name: %s, Tag: %s\n", subject->id, subject->name, subject->tag);
+    
+    // 모든 부모 과목에 대해 재귀 호출
+    for (int i = 0; i < subject->parent_count; i++) {
+        print_subject_map(subject->parents[i], depth - 1);
+    }
+}
 
