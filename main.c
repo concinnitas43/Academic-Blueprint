@@ -18,9 +18,9 @@ int main(void)
             case INPUT:
                 input_screen(); break;
             // case SEARCH:
-            //     select_array = search_screen(&subject_map); break;
+                // select_array = search_screen(&subject_map); break;
             // case SELECT:
-            //     subject_to_call = select_screen(select_array); break;
+            //     t?subject_to_call = select_screen(select_array); break;
             case INFO:
                 info_screen(); break;
             // case CHANGE:
@@ -364,7 +364,7 @@ void add_parent(Subject* subject)
         return;
     }
 
-    add_prereq(subject_add, subject);
+    add_prereq(&subject_map, subject, subject_add);
     return;
 }
 
@@ -376,7 +376,7 @@ void add_child(Subject* subject)
         return;
     }
 
-    add_prereq(subject, subject_add);
+    add_prereq(&subject_map, subject_add, subject);
     return;
 }
 
@@ -440,3 +440,31 @@ void follow_screen(Subject* subject)
     }
     return;
 }
+
+
+void saveload_screen()
+{
+    printf("\nhi, this is the save & load screen.\n");
+    printf("save & load screen menu:\n\tsave: 0\n\tload: 1\n\tgo back to main screen: else\n");
+    printf("user input: ");
+    int st=-1;
+    char filename[50];
+    scanf("%d", &st);
+    switch(st)
+    {
+        case 0:
+            printf("Input the file name to save: ");
+            scanf("%s", filename);
+            save_map(&subject_map, filename);
+            break;
+        case 1:
+            printf("Input the file name to load: ");
+            scanf("%s", filename);
+            load_map(&subject_map, filename);
+            break;
+        default:
+            printf("loading main screen...\n");
+            state = MAIN;
+    }
+    return;
+} // SAVEs and LOADs file
