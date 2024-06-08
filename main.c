@@ -31,8 +31,8 @@ int main(void)
             //     select_array = follow_parent_screen(subject_to_call); break;
             // case FOLLOW_c:
             //     select_array = follow_child_screen(subject_to_call); break;
-            case SAVELOAD:
-                saveload_screen(); break;
+            // case SAVELOAD:
+            //     saveload_screen(); break;
 
             default: return 1;
         }
