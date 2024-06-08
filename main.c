@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "main.h"
 
 // enum STATE {MAIN, INPUT, SEARCH, SELECT, INFO, FOLLOW, SAVELOAD};
@@ -286,11 +283,6 @@ void info_interface(Subject* subject)
     return;
 }
 
-void add_to_timetable(Subject* subject, Timetable* timetable, int semester)
-{
-    return;
-} // add to timetable
-
 // interface of INFO
 void delete_subject(Subject *subject)
 {
@@ -354,6 +346,7 @@ void change_name(Subject* subject)
     strcpy(subject->name, name);
     return;
 }
+
 void change_tag(Subject* subject)
 {
     char tag[50];
@@ -374,6 +367,7 @@ void add_parent(Subject* subject)
     add_prereq(subject_add, subject);
     return;
 }
+
 void add_child(Subject* subject)
 {
     Subject* subject_add = select_screen();
@@ -385,6 +379,7 @@ void add_child(Subject* subject)
     add_prereq(subject, subject_add);
     return;
 }
+
 void delete_parent(Subject* subject)
 {
     Subject* subject_delete = select_in_array(subject->parents, subject->parent_count);
@@ -396,6 +391,7 @@ void delete_parent(Subject* subject)
     remove_prereq(subject_delete, subject);
     return;
 }
+
 void delete_child(Subject* subject)
 {
     Subject* subject_delete = select_in_array(subject->parents, subject->parent_count);
@@ -444,9 +440,3 @@ void follow_screen(Subject* subject)
     }
     return;
 }
-
-// RELATED TO SAVELOAD AND SETTINGS
-void saveload_screen()
-{
-    return;
-} // SAVEs and LOADs file

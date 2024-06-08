@@ -1,60 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-// Subject 구조체 정의
-typedef struct Subject {
-    int id;                  
-    char name[50];
-    char tag[50];                
-    struct Subject **parents;
-    struct Subject **childs;
-    int parent_count;
-    int child_count;
-} Subject;
-
-// Map 구조체 정의
-typedef struct {
-    Subject** subjects;
-    int size;
-} Map;
-
-// Subject 초기화 함수
-Subject* create_subject(int id, const char* name, const char* tag) {
-    Subject* new_subject = (Subject*)malloc(sizeof(Subject));
-    new_subject->id = id;
-    strcpy(new_subject->name, name);
-    strcpy(new_subject->tag, tag);  // 태그 설정
-    new_subject->parents = NULL;
-    new_subject->childs = NULL;
-    new_subject->parent_count = 0;
-    new_subject->child_count = 0;
-    return new_subject;
-}
-
-// Map 출력 함수
-void print_map(Map* map) {
-    for (int i = 0; i < map->size; i++) {
-        printf("ID: %d, Name: %s, Tag: %s\n", map->subjects[i]->id, map->subjects[i]->name, map->subjects[i]->tag);
-    }
-}
-
-// 비교 함수
-int compare_subjects(const void* a, const void* b) {
-    Subject* subjectA = *(Subject**)a;
-    Subject* subjectB = *(Subject**)b;
-    return (subjectA->id - subjectB->id);
-}
-
-// Map 생성 함수
-Map* create_map(Subject** subjects, int num_subjects) {
-    Map* map = (Map*)malloc(sizeof(Map));
-    map->subjects = (Subject**)malloc(num_subjects * sizeof(Subject*));
-    memcpy(map->subjects, subjects, num_subjects * sizeof(Subject*));
-    map->size = num_subjects;
-    qsort(map->subjects, num_subjects, sizeof(Subject*), compare_subjects);
-    return map;
-}
+#include "prereq.h"
 
 // 선행 과목 추가 함수
 int add_prereq(Subject* child, Subject* parent) {
@@ -123,12 +67,7 @@ int remove_prereq(Subject* child, Subject* parent) {
     return (parent_found && child_found) ? 0 : -1; // 성공적으로 제거됨
 }
 
-// 구조체 해제 함수
-void free_subject(Subject* subject) {
-    free(subject->parents);
-    free(subject->childs);
-    free(subject);
-}
+
 
 // 큐 정의
 typedef struct Queue {
@@ -213,24 +152,4 @@ int check_cycle(Subject* subject) {
     free(queue);
     free(visited);
     return 0; // 사이클이 발견되지 않음
-}
-
-// Subject Map 출력 함수
-void print_subject_map(Subject* subject, int depth) {
-    if (depth < 0 || subject == NULL) {
-        return;
-    }
-    
-    // 출력 들여쓰기
-    for (int i = 0; i < depth; i++) {
-        printf("  ");
-    }
-    
-    // 현재 과목 출력
-    printf("ID: %d, Name: %s, Tag: %s\n", subject->id, subject->name, subject->tag);
-    
-    // 모든 부모 과목에 대해 재귀 호출
-    for (int i = 0; i < subject->parent_count; i++) {
-        print_subject_map(subject->parents[i], depth - 1);
-    }
 }
