@@ -42,6 +42,9 @@ void append_subject(Map* map, Subject* subject); // Implement using realloc
 // void free_subject(Subject* subject);
 void free_map(Map* map);
 
+// ********** SEARCH RELATED ********** 
+int name_search(char* name, Map* map, int * search_result); //Returns the number of search results, might need another function to define this one recursively
+
 // ********** SAVE LOAD RELATED ********** 
 void load_map(Map* map, char* filename);
 void save_map(Map* map, char* filename);
