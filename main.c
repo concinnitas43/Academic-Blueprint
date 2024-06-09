@@ -8,7 +8,7 @@ int main(void)
     printf("\n\nHello! This is the ACADEMIC BLUEPRINT.\n");
     printf("We manage subjects and their hierarchy!\n\n");
     printf("Please keep in mind that user input should be in integer form.\n");
-    while(1)
+    while(1) // 메인 루프
     {
         switch (state)
         {
@@ -26,7 +26,7 @@ int main(void)
     }
 }
 
-/*
+/* <<main 구조>>
 MAIN main_screen()
     INPUT input_screen()
 
@@ -267,8 +267,6 @@ int select_interface(int index) // index 선택을 위한 함수
     return sel_index;
 } // RETURNS THE ID
 
-
-// interface of INFO
 void delete_subject(Subject *subject)
 {
     subject->id=-1;
