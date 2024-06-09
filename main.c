@@ -1,40 +1,24 @@
 #include "main.h"
 
-// enum STATE {MAIN, INPUT, SEARCH, SELECT, INFO, FOLLOW, SAVELOAD};
-enum STATE state;
-Map subject_map = {NULL, 0};
+enum STATE state = MAIN; // 실행 화면 결정 변수
+Map subject_map = {NULL, 0}; // 과목 정보 저장할 Map 변수
 
 int main(void)
 {
-    Subject* subject_to_call;
-    Subject** select_array;
-
     while(1)
     {
         switch (state)
         {
-            case MAIN:
+            case MAIN: // main_screen() 호출
                 main_screen(); break;
-            case INPUT:
+            case INPUT: // input_screen() 호출
                 input_screen(); break;
-            // case SEARCH:
-            //     select_array = search_screen(&subject_map); break;
-            // case SELECT:
-            //     subject_to_call = select_screen(select_array); break;
-            case INFO:
+            case INFO: // info_screen() 호출
                 info_screen(); break;
-            // case CHANGE:
-            //     change_subject_screen(subject_to_call); break;
-            // case FOLLOW:
-            //     follow_screen(subject_to_call); break;
-            // case FOLLOW_p:
-            //     select_array = follow_parent_screen(subject_to_call); break;
-            // case FOLLOW_c:
-            //     select_array = follow_child_screen(subject_to_call); break;
-            // case SAVELOAD:
-            //     saveload_screen(); break;
 
-            default: return 1;
+            default:
+                printf("ending program...\n");
+                return 0;
         }
     }
 }
@@ -51,10 +35,6 @@ main_screen()
     saveload_screen()
 */
 
-
-// *****************
-// jiyeon 
-
 // RELATED TO MAIN
 void main_screen()
 {
@@ -63,6 +43,7 @@ void main_screen()
     printf("\tinput subject: 0\n");
     printf("\tsearch subject: 1\n");
     printf("\tsave & load: 2\n");
+    printf("\tend program: -1\n");
     printf("user input: ");
     int st=-1;
     scanf("%d", &st);
@@ -77,9 +58,12 @@ void main_screen()
         case 2:
             state = SAVELOAD;
             break;
+        case -1:
+            state = -1;
+            break;
         default:
             printf("input ERROR. loading main screen again...\n");
-            state = MAIN;
+            break;
     }
     return;
 }
@@ -98,6 +82,7 @@ void input_screen()
         state = MAIN;
         return;
     }
+
     char name[50], tag[50]; // input name, tag
     printf("name? ");
     scanf("%s", name);
@@ -150,12 +135,9 @@ Subject** search_screen(Map* map)
     pointers[searched_size]=NULL;
     
     return pointers;
-} // SEARCH -> SELECT -> INFO
-// > select_screen
-// char* search_interface()
-// {
-//     return NULL;
-// }
+} // search -> select -> INFO
+// > used in select_screen
+
 int select_interface(int index)
 {
     printf("\nselect index. (range %d to %d) ", 0, index-1);
@@ -203,7 +185,7 @@ Subject* select_screen()
     state = INFO;
     return subject_array[sel_index];
 }
-// > info_screen
+// > used in info_screen
 
 Subject* select_in_array(Subject** subject_array, int count)
 {
@@ -241,6 +223,7 @@ void info_print(Subject* subject)
     printf("\nsubject info:\n");
     printf("name: %s tag: %s\n", subject->name, subject->tag);
     print_subject_map(subject, 0);
+    print_subject_hierarchy(subject, 0);
 }
 
 void info_interface(Subject* subject)

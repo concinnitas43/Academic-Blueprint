@@ -5,7 +5,7 @@
 #define MAX_CHILDREN 100
 #define MAX_PARENTS 100
 
-enum STATE {MAIN, INPUT, SEARCH, SELECT, INFO, SAVELOAD};
+enum STATE {MAIN, INPUT, INFO, SAVELOAD};
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,7 +22,6 @@ void input_screen(); // use create_subject, append_subject
 // RELATED TO SEARCH
 Subject** search_screen(Map* map); // SEARCH -> SELECT -> INFO
 // > select_screen
-// char* search_interface();
 int select_interface(int index); // RETURNS THE ID
 
 // RELATED TO SELECT
@@ -32,8 +31,6 @@ Subject* select_in_array(Subject** subject_array, int count); // used to delete 
 
 // RELATED TO INFO
 void info_screen(); // use delete, change, follow
-// void add_prereq_interface(Subject* child); // select parent using search & select interface, then add prereq
-// void delete_prereq_interface(Subject* child); // select parent using search & select interface, then delete prereq
 void info_print(Subject* subject);
 void info_interface(Subject* subject);
 
@@ -50,8 +47,6 @@ void delete_parent(Subject* subject);
 void delete_child(Subject* subject);
 
 void follow_screen(Subject* subject);
-// Subject** follow_parent_screen(Subject* subject); // return array of parent pointer to SELECT
-// Subject** follow_child_screen(Subject* subject); // return array of child pointer to SELECT
 
 // RELATED TO SAVELOAD AND SETTINGS
 void saveload_screen(); // SAVEs and LOADs file
