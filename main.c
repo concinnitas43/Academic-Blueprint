@@ -267,11 +267,12 @@ int select_interface(int index) // index 선택을 위한 함수
     return sel_index;
 } // RETURNS THE ID
 
-void delete_subject(Subject *subject)
+void delete_subject(Subject *subject) // 과목 삭제
 {
-    subject->id=-1;
-    strcpy(subject->name, "");
-    strcpy(subject->tag, "");
+    subject->id=-1; // id -1로
+    strcpy(subject->name, ""); // 이름 삭제
+    strcpy(subject->tag, ""); // 태그 삭제
+    // parent, child관계 끊기
     for(int i=0; i<(subject->parent_count); i++)
     {
         remove_prereq((subject->parents)[i], subject);
@@ -313,7 +314,7 @@ void change_subject_screen(Subject* subject)
         case 5: // delete child
             delete_child(subject);
             break;
-        default: // input error
+        default: // load main screen
             printf("loading main screen...");
             state = MAIN;
     }
