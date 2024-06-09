@@ -68,7 +68,6 @@ void main_screen()
     return;
 }
 
-
 // RELATED TO INPUT
 void input_screen()
 {
@@ -222,8 +221,8 @@ void info_print(Subject* subject)
 {
     printf("\nsubject info:\n");
     printf("name: %s tag: %s\n", subject->name, subject->tag);
-    print_subject_map(subject, 0);
-    print_subject_hierarchy(subject, 0);
+    print_subject_map(subject, 1);
+    print_subject_hierarchy(subject, 0, 1);
 }
 
 void info_interface(Subject* subject)
