@@ -24,51 +24,63 @@ int main(void)
 }
 
 /*
-main_screen()
-    input_screen()
-    search_screen()  // strin 이용하여 pointer배열 반환?
-        select_screen() // pointer배열에서 선택 (?번째)
-            info_screen() // 선택한 Subject의 info
-                free
-                change
-                follow_parent
-    saveload_screen()
+MAIN main_screen()
+    INPUT input_screen()
+
+    INFO info_screen() < select_screen() < search_screen(_) - select_interface(_)
+        info_interface(_)
+            > info_print(_)
+            delete_subject(_) -> MAIN
+            change_subject_screen(_) -> MAIN
+                >info_print(_)
+                change_name(_)
+                change_tag(_)
+                add_parent(_)
+                add_child(_)
+                delete_parent(_)
+                delete_child(_)
+                -> MAIN
+            follow_screen(_)
+                -> INFO
+                    info_interface(select_in_array(_, _))
+                    -> MAIN
+    SAVELOAD
 */
 
-// RELATED TO MAIN
+// MAIN
 void main_screen()
 {
-    printf("\nhi, this is the main screen.\n");
-    printf("main screen menu:\n");
+    printf("\nhi, this is the main screen.\n"); // main screen 안내
+    printf("main screen menu:\n"); // menu 안내
     printf("\tinput subject: 0\n");
     printf("\tsearch subject: 1\n");
     printf("\tsave & load: 2\n");
     printf("\tend program: -1\n");
     printf("user input: ");
-    int st=-1;
+    int st=-1; // variable for menu select
     scanf("%d", &st);
     switch(st)
     {
-        case 0:
+        case 0: // input
             state = INPUT;
             break;
-        case 1:
+        case 1: // info
             state = INFO;
             break;
-        case 2:
+        case 2: // save & load
             state = SAVELOAD;
             break;
-        case -1:
+        case -1: // end program
             state = -1;
             break;
-        default:
+        default: // error
             printf("input ERROR. loading main screen again...\n");
             break;
     }
     return;
 }
 
-// RELATED TO INPUT
+// MAIN > INPUT
 void input_screen()
 {
     printf("\nhi, this is the input screen.\n");
@@ -98,6 +110,103 @@ void input_screen()
     printf("ERROR on adding subject.\n"); // if else
     return;
 } // use create_subject, append_subject
+
+
+// MAIN > INFO
+void info_screen() // screen
+{
+    Subject* subject = select_screen(); // subject to deliver to info_interface
+    if(subject == NULL)
+    {
+        return;
+    } // if error on selecting subject, select again (comes back by main while(1) loop)
+
+    info_interface(subject); // calls info_interface()
+    return;
+} // use select_screen() which uses search_screen()
+// calls info_interface()
+
+void info_interface(Subject* subject) // called from info_screen(), follow_screen()
+{
+    info_print(subject);
+    printf("\ninfo screen menu:\n");
+    printf("\tdelete: 0\n\tchange: 1\n\tfollow: 2\n\tgo back to main screen: else\n");
+    printf("user input: ");
+    int st=-1; // variable for menu select
+    scanf("%d", &st);
+    switch(st)
+    {
+        case 0: // delete
+            delete_subject(subject);
+            if(subject->id!=-1 || strcmp(subject->name, "")!=0 || strcmp(subject->tag, "")!=0)
+            {
+                printf("ERROR. loading info screen again...\n");
+                break;
+            } // case of error
+            printf("subject deleted. loading main screen...\n"); // succes
+            state = MAIN; // back to main
+            break;
+        case 1: // change
+            change_subject_screen(subject);
+            if(state == INFO) // info succesfully changed
+            {
+                printf("changed info\n");
+                info_print(subject);
+            }
+            state = MAIN; // back to main
+            break;
+        case 2: // follow
+            follow_screen(subject);
+            break;
+        default: // back to main screen
+            printf("loading main screen...\n");
+            state = MAIN; // back to main
+    }
+    return;
+}
+
+void info_print(Subject* subject) // prints info of subject
+{
+    printf("\nsubject info:\n");
+    printf("name: %s tag: %s\n", subject->name, subject->tag); // info
+    print_subject_map(subject, 1); // 부모과목 print
+    print_subject_hierarchy(subject, 0, 1); // 자식과목 print
+}
+
+
+// RELATED TO SELECT
+Subject* select_screen()
+{
+    Subject** subject_array = search_screen(&subject_map);
+    if(subject_array==NULL)
+    {
+        return NULL;
+    }
+
+    int index=0;
+
+    printf("\n");
+    while(subject_array[index]!=NULL)
+    {
+        printf("index %d: ", index);
+        printf("name: %s tag: %s\n", subject_array[index]->name, subject_array[index]->tag);
+        index++;
+    }
+
+    if(index==0){
+        printf("search ERROR.\n");
+        state = MAIN;
+        return NULL;
+    }
+
+    printf("\nhi, this is the select screen.\n");
+    int sel_index = select_interface(index);
+
+    printf("%s selected.\n", subject_array[sel_index]->name);
+    state = INFO;
+    return subject_array[sel_index];
+}
+// > used in info_screen
 
 // RELATED TO SEARCH
 Subject** search_screen(Map* map)
@@ -152,118 +261,6 @@ int select_interface(int index)
     return sel_index;
 } // RETURNS THE ID
 
-// RELATED TO SELECT
-Subject* select_screen()
-{
-    Subject** subject_array = search_screen(&subject_map);
-    if(subject_array==NULL)
-    {
-        return NULL;
-    }
-
-    int index=0;
-
-    printf("\n");
-    while(subject_array[index]!=NULL)
-    {
-        printf("index %d: ", index);
-        printf("name: %s tag: %s\n", subject_array[index]->name, subject_array[index]->tag);
-        index++;
-    }
-
-    if(index==0){
-        printf("search ERROR.\n");
-        state = MAIN;
-        return NULL;
-    }
-
-    printf("\nhi, this is the select screen.\n");
-    int sel_index = select_interface(index);
-
-    printf("%s selected.\n", subject_array[sel_index]->name);
-    state = INFO;
-    return subject_array[sel_index];
-}
-// > used in info_screen
-
-Subject* select_in_array(Subject** subject_array, int count)
-{
-    int index=0;
-
-    printf("\n");
-    while(index<count)
-    {
-        printf("index %d: ", index);
-        printf("name: %s tag: %s\n", subject_array[index]->name, subject_array[index]->tag);
-        index++;
-    }
-
-    int sel_index = select_interface(index);
-    printf("%s selected.\n", subject_array[sel_index]->name);
-
-    return subject_array[sel_index];
-}
-
-// RELATED TO INFO
-void info_screen()
-{
-    Subject* subject = select_screen();
-    if(subject == NULL)
-    {
-        return;
-    }
-
-    info_interface(subject);
-    return;
-} // use delete, change, follow
-
-void info_print(Subject* subject)
-{
-    printf("\nsubject info:\n");
-    printf("name: %s tag: %s\n", subject->name, subject->tag);
-    print_subject_map(subject, 1);
-    print_subject_hierarchy(subject, 0, 1);
-}
-
-void info_interface(Subject* subject)
-{
-    info_print(subject);
-    // delete, change, follow
-    printf("\ninfo screen menu:\n");
-    printf("\tdelete: 0\n\tchange: 1\n\tfollow: 2\n\tgo back to main screen: else\n");
-    printf("user input: ");
-    int st=-1;
-    scanf("%d", &st);
-    switch(st)
-    {
-        case 0:
-            delete_subject(subject);
-            if(subject->id!=-1 || strcmp(subject->name, "")!=0 || strcmp(subject->tag, "")!=0)
-            {
-                printf("ERROR. loading info screen again...\n");
-                break;
-            }
-            printf("subject deleted. loading main screen...\n");
-            state = MAIN;
-            break;
-        case 1:
-            change_subject_screen(subject);
-            if(state == INFO)
-            {
-                printf("changed info\n");
-                info_print(subject);
-            }
-            state = MAIN;
-            break;
-        case 2:
-            follow_screen(subject);
-            break;
-        default:
-            printf("loading main screen...\n");
-            state = MAIN;
-    }
-    return;
-}
 
 // interface of INFO
 void delete_subject(Subject *subject)
@@ -319,6 +316,45 @@ void change_subject_screen(Subject* subject)
     }
     return;
 } // changes info or parents
+
+
+void follow_screen(Subject* subject)
+{
+    printf("\nhi, this is the follow screen.\n");
+    printf("follow screen menu:\n\tfollow parent: 0\n\tfollow child: 1\n\tgo back to main screen: else\n");
+    int st=-1;
+    printf("user input: ");
+    scanf("%d", &st);
+
+    switch(st)
+    {
+        case 0:
+            state = INFO;
+            if((subject->parent_count)<=0)
+            {
+                printf("No parent to follow\n");
+                state = MAIN;
+                break;
+            }
+            info_interface(select_in_array(subject->parents, subject->parent_count));
+            break;
+        case 1:
+            state = INFO;
+            if((subject->child_count)<=0)
+            {
+                printf("No child to follow\n");
+                state = MAIN;
+                break;
+            }
+            info_interface(select_in_array(subject->childs, subject->child_count));
+            break;
+        default:
+            printf("loading main screen...\n");
+            state = MAIN;
+    }
+    return;
+}
+
 
 void change_name(Subject* subject)
 {
@@ -386,39 +422,21 @@ void delete_child(Subject* subject)
     return;
 }
 
-void follow_screen(Subject* subject)
+Subject* select_in_array(Subject** subject_array, int count)
 {
-    printf("\nhi, this is the follow screen.\n");
-    printf("follow screen menu:\n\tfollow parent: 0\n\tfollow child: 1\n\tgo back to main screen: else\n");
-    int st=-1;
-    printf("user input: ");
-    scanf("%d", &st);
+    int index=0;
 
-    switch(st)
+    printf("\n");
+    while(index<count)
     {
-        case 0:
-            state = INFO;
-            if((subject->parent_count)<=0)
-            {
-                printf("No parent to follow\n");
-                state = MAIN;
-                break;
-            }
-            info_interface(select_in_array(subject->parents, subject->parent_count));
-            break;
-        case 1:
-            state = INFO;
-            if((subject->child_count)<=0)
-            {
-                printf("No child to follow\n");
-                state = MAIN;
-                break;
-            }
-            info_interface(select_in_array(subject->childs, subject->child_count));
-            break;
-        default:
-            printf("loading main screen...\n");
-            state = MAIN;
+        printf("index %d: ", index);
+        printf("name: %s tag: %s\n", subject_array[index]->name, subject_array[index]->tag);
+        index++;
     }
-    return;
+
+    int sel_index = select_interface(index);
+    printf("%s selected.\n", subject_array[sel_index]->name);
+
+    return subject_array[sel_index];
 }
+
