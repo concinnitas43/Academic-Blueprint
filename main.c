@@ -18,7 +18,8 @@ int main(void)
                 input_screen(); break;
             case INFO: // info_screen() 호출
                 info_screen(); break;
-
+            case SAVELOAD:
+                saveload_screen(); break;
             default:
                 printf("ending program...\n");
                 return 0;
@@ -442,5 +443,35 @@ Subject* select_in_array(Subject** subject_array, int count) // selecting subjec
     printf("%s selected.\n", subject_array[sel_index]->name);
 
     return subject_array[sel_index]; // 선택된 subject 주소 리턴
+}
+
+void saveload_screen()
+{
+    printf("\nhi, this is the saveload screen.\n");
+    printf("saveload screen menu:\n\tsave: 0\n\tload: 1\n\tgo back to main screen: else\n");
+    printf("user input: ");
+    int st=-1;
+    scanf("%d", &st);
+
+    char filename[50];
+
+    switch(st)
+    {
+        case 0:
+            printf("filename to save? ");
+            scanf("%s", filename);
+            save_map(&subject_map, filename);
+            break;
+        case 1:
+            printf("filename to load? ");
+            scanf("%s", filename);
+            load_map(&subject_map, filename);
+
+            break;
+        default:
+            printf("loading main screen...\n");
+            state = MAIN;
+    }
+    return;
 }
 
