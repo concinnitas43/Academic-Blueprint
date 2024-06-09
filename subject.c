@@ -48,15 +48,17 @@ void free_subject(Subject* subject) {
 }
 
 
-
 // Subject Map 출력 함수 (선행 과목 출력)
-void print_subject_map(Subject* subject, int depth) {
-    if (depth < 0 || subject == NULL) { // 깊이가 0보다 작거나 Subject가 NULL인 경우
+void print_subject_map(Subject* subject, int depth)
+{
+    if (depth < 0 || subject == NULL) // 깊이가 0보다 작거나 Subject가 NULL인 경우
+    {
         return; // 함수 종료
     }
 
     // 출력 들여쓰기
-    for (int i = 0; i < depth; i++) {
+    for (int i = 0; i < depth; i++)
+    {
         printf("  "); // 깊이에 따라 들여쓰기
     }
 
@@ -64,8 +66,27 @@ void print_subject_map(Subject* subject, int depth) {
     printf("%3d : %s (%s)\n", subject->id, subject->name, subject->tag);
 
     // 모든 부모 과목에 대해 재귀 호출
-    for (int i = 0; i < subject->parent_count; i++) {
+    for (int i = 0; i < subject->parent_count; i++)
+    {
         print_subject_map(subject->parents[i], depth - 1); // 부모 과목에 대해 재귀 호출
+    }
+}
+
+// Subject 계층 구조 출력 함수 (후속 과목 출력)
+void print_subject_hierarchy(Subject* subject, int level, int depth)
+{
+    if (depth == level-1 || subject == NULL)
+    {
+        return; // Subject가 NULL인 경우 함수 종료
+    }
+    for (int i = 0; i < level; i++)
+    {
+        printf("  "); // 레벨에 따라 들여쓰기
+    }
+    printf("%3d : %s (%s)\n", subject->id, subject->name, subject->tag); // 현재 과목 출력
+    for (int i = 0; i < subject->child_count; i++)
+    {
+        print_subject_hierarchy(subject->childs[i], level + 1, depth); // 자식 과목에 대해 재귀 호출
     }
 }
 

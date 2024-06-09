@@ -33,8 +33,15 @@ typedef struct timetable
 
 Subject* create_subject(char* name, char* tag, int id); // Implement using malloc
 void print_map(Map* map); // depth is needed for recursion
-void print_subject_map(Subject* subject, int depth); // subject 내의 Subject ** parents, childs 이용하여 재귀적으로?
+// void print_subject_map(Subject* subject, int depth); // subject 내의 Subject ** parents, childs 이용하여 재귀적으로?
 // void delete_node(Subject* subject, Map* map); // Need to Free!
+
+
+// Subject Map 출력 함수 (선행 과목 출력)
+void print_subject_map(Subject* subject, int depth);
+
+// Subject 계층 구조 출력 함수 (후속 과목 출력)
+void print_subject_hierarchy(Subject* subject, int level, int depth);
 
 // ********** NOT IMPLEMENTED ********** 
 void append_subject(Map* map, Subject* subject); // Implement using realloc
