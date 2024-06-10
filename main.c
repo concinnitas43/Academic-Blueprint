@@ -275,15 +275,14 @@ void delete_subject(Subject *subject) // 과목 삭제
     subject->id=-1; // id -1로
     strcpy(subject->name, ""); // 이름 삭제
     strcpy(subject->tag, ""); // 태그 삭제
-    // parent, child관계 끊기
     for(int i=0; i<(subject->parent_count); i++)
     {
         remove_prereq(subject, (subject->parents)[i]);
-    }
+    } // parent 끊기
     for(int i=0; i<(subject->child_count); i++)
     {
         remove_prereq((subject->childs)[i], subject);
-    }
+    } // child 끊기
     return;
 }
 
@@ -389,7 +388,7 @@ void add_parent(Subject* subject) // add parent in subject
         return;
     } // if error in select
 
-    add_prereq(subject_add, subject); // add parent
+    add_prereq(subject, subject_add); // add parent
     return;
 }
 
@@ -401,7 +400,7 @@ void add_child(Subject* subject) // add child in subject
         return;
     } // if error in select
 
-    add_prereq(subject, subject_add); // add child
+    add_prereq(subject_add, subject); // add child
     return;
 }
 
@@ -413,7 +412,7 @@ void delete_parent(Subject* subject) // delete parent
         return;
     } // if error in select
 
-    remove_prereq(subject_delete, subject); // delete parent
+    remove_prereq(subject, subject_delete); // delete parent
     return;
 }
 
@@ -425,7 +424,7 @@ void delete_child(Subject* subject) // delete child
         return;
     } // if error in select
 
-    remove_prereq(subject, subject_delete); // delete child
+    remove_prereq(subject_delete, subject); // delete child
     return;
 }
 
