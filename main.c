@@ -20,6 +20,8 @@ int main(void)
                 info_screen(); break;
             case SAVELOAD:
                 saveload_screen(); break;
+            case TIMETABLE:
+                timetable_screen(); break;
             default:
                 printf("ending program...\n");
                 return 0;
@@ -475,3 +477,8 @@ void saveload_screen()
     return;
 }
 
+
+
+void timetable_screen()
+{
+}

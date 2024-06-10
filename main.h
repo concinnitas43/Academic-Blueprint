@@ -5,7 +5,7 @@
 #define MAX_CHILDREN 100
 #define MAX_PARENTS 100
 
-enum STATE {MAIN, INPUT, INFO, SAVELOAD};
+enum STATE {MAIN, INPUT, INFO, SAVELOAD, TIMETABLE};
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,5 +48,7 @@ void follow_screen(Subject* subject);
 
 // RELATED TO SAVELOAD AND SETTINGS
 void saveload_screen(); // SAVEs and LOADs file
+
+void timetable_screen();
 
 #endif
