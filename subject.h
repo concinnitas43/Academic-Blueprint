@@ -38,7 +38,7 @@ void print_map(Map* map); // depth is needed for recursion
 
 
 // Subject Map 출력 함수 (선행 과목 출력)
-void print_subject_map(Subject* subject, int depth);
+void print_subject_map(Subject* subject, int depth, int is_first);
 
 // Subject 계층 구조 출력 함수 (후속 과목 출력)
 void print_subject_hierarchy(Subject* subject, int level, int depth);

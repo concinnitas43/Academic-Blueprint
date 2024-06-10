@@ -200,13 +200,13 @@ int remove_prereq(Subject* child, Subject* parent) {
 
 
 
-// 큐 정의
-typedef struct Queue {
-    Subject **subjects;
-    int front;
-    int rear;
-    int capacity;
-} Queue;
+// // 큐 정의
+// typedef struct Queue {
+//     Subject **subjects;
+//     int front;
+//     int rear;
+//     int capacity;
+// } Queue;
 
 // 큐 초기화 함수
 Queue* create_queue(int capacity) {
