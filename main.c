@@ -276,11 +276,11 @@ void delete_subject(Subject *subject) // 과목 삭제
     // parent, child관계 끊기
     for(int i=0; i<(subject->parent_count); i++)
     {
-        remove_prereq((subject->parents)[i], subject);
+        remove_prereq(subject, (subject->parents)[i]);
     }
     for(int i=0; i<(subject->child_count); i++)
     {
-        remove_prereq(subject, (subject->childs)[i]);
+        remove_prereq((subject->childs)[i], subject);
     }
     return;
 }
