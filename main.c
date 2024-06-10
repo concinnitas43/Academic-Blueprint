@@ -175,7 +175,7 @@ void info_print(Subject* subject) // prints info of subject
 {
     printf("\nsubject info:\n");
     printf("name: %s tag: %s\n", subject->name, subject->tag); // info
-    print_subject_map(subject, 1); // 부모과목 print
+    print_subject_map(subject, 1, 1); // 부모과목 print
     print_subject_hierarchy(subject, 0, 1); // 자식과목 print
 }
 
@@ -197,7 +197,7 @@ Subject* select_screen()
     {
         printf("index %d: ", index);
         printf("name: %s tag: %s\n", subject_array[index]->name, subject_array[index]->tag); // info
-        print_subject_map(subject_array[index], 1); // 부모과목 print
+        print_subject_map(subject_array[index], 1, 1); // 부모과목 print
         print_subject_hierarchy(subject_array[index], 0, 1); // 자식과목 print
         index++; // 다음 index로
     }
@@ -388,7 +388,7 @@ void add_parent(Subject* subject) // add parent in subject
         return;
     } // if error in select
 
-    add_prereq(subject, subject_add); // add parent
+    add_prereq(&subject_map, subject, subject_add); // add parent
     return;
 }
 
@@ -400,7 +400,7 @@ void add_child(Subject* subject) // add child in subject
         return;
     } // if error in select
 
-    add_prereq(subject_add, subject); // add child
+    add_prereq(&subject_map, subject_add, subject); // add child
     return;
 }
 
