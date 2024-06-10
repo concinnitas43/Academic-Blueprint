@@ -197,8 +197,8 @@ Subject* select_screen()
     {
         printf("index %d: ", index);
         printf("name: %s tag: %s\n", subject_array[index]->name, subject_array[index]->tag); // info
-        print_subject_map(subject_array[index], 1, 1); // 부모과목 print
-        print_subject_hierarchy(subject_array[index], 0, 1); // 자식과목 print
+        // print_subject_map(subject_array[index], 1, 1); // 부모과목 print
+        // print_subject_hierarchy(subject_array[index], 0, 1); // 자식과목 print
         index++; // 다음 index로
     }
 

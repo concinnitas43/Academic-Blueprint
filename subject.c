@@ -217,6 +217,7 @@ void save_map(Map* map, char* filename)
         {
             fprintf(file, " %d", map->subjects[i].childs[j]->id);
         }
+        fprintf(file, "\n");
     }
 
     fclose(file);
