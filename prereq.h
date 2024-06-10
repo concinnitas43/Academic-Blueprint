@@ -3,12 +3,19 @@
 #include <stdio.h>
 #include "subject.h"
 
+typedef struct Queue {
+    Subject** subjects;
+    int front;
+    int rear;
+    int capacity;
+} Queue;
+
 // int check_cycle(Subject* subject); // after connect Parent subject with Child subject, Returns 1 if there is a cycle start with parent subject, 0 if not(by dfs)
 // int add_prereq(Subject* parent, Subject* child); // add them both ways (return 0), if already exists (return 1), do nothing. if there is a cycle, return 2
 // int remove_prereq(Subject* parent, Subject* child); // remove them both ways(return 0), if not exists(return -1), do nothing
 
 // 함수 정의 부분
-Subject* create_subject(int id, const char* name, const char* tag);
+// Subject* create_subject(int id, const char* name, const char* tag);
 void print_map(Map* map);
 int compare_subjects(const void* a, const void* b);
 Map* create_map(Subject** subjects, int num_subjects);

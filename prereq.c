@@ -1,32 +1,8 @@
 #include "prereq.h"
 
-// 큐 정의
-typedef struct Queue {
-    Subject** subjects;
-    int front;
-    int rear;
-    int capacity;
-} Queue;
-
 // int main() {
 //     // 과목 생성
-//     Subject* math = create_subject(1, "Math", "core");
-//     Subject* physics = create_subject(2, "Physics", "core");
-//     Subject* chemistry = create_subject(3, "Chemistry", "core");
-//     Subject* biology = create_subject(4, "Biology", "core");
-//     Subject* english = create_subject(5, "English", "core");
-//     Subject* history = create_subject(6, "History", "core");
 
-//     Subject* advancedPhysics = create_subject(7, "Advanced Physics", "advanced");
-//     Subject* advancedChemistry = create_subject(8, "Advanced Chemistry", "core"); // subject_tag_tree 확인을 위해 advanced에서 core로 변경
-//     Subject* advancedBiology = create_subject(9, "Advanced Biology", "advanced");
-//     Subject* advancedMath = create_subject(10, "Advanced Math", "advanced");
-
-//     Subject* quantumPhysics = create_subject(11, "Quantum Physics", "high-advanced");
-//     Subject* molecularBiology = create_subject(12, "Molecular Biology", "high-advanced");
-//     Subject* test = create_subject(13, "Test", "high-advanced");
-
-//     // 과목 배열 생성
 //     Subject* subjects[] = { math, physics, chemistry, biology, english, history,
 //                            advancedPhysics, advancedChemistry, advancedBiology, advancedMath,
 //                            quantumPhysics, molecularBiology, test };
@@ -120,12 +96,12 @@ typedef struct Queue {
 
 
 // Subject 초기화 함수
-// subject 비교 함수(qsort에 사용됨)
-int compare_subjects(const void* a, const void* b) {
-    Subject* subject1 = *(Subject**)a; // 첫 번째 Subject 포인터
-    Subject* subject2 = *(Subject**)b; // 두 번째 Subject 포인터
-    return (subject1->id - subject2->id); // ID를 기준으로 비교
-}
+// // subject 비교 함수(qsort에 사용됨)
+// int compare_subjects(const void* a, const void* b) {
+//     Subject* subject1 = *(Subject**)a; // 첫 번째 Subject 포인터
+//     Subject* subject2 = *(Subject**)b; // 두 번째 Subject 포인터
+//     return (subject1->id - subject2->id); // ID를 기준으로 비교
+// }
 
 // // Map 생성 함수
 // Map* create_map(Subject** subjects, int num_subjects) {
@@ -654,7 +630,7 @@ void handle_inconsistent_prereq(Map* map) {
                 char choice;
                 printf("Inconsistent prerequisite detected between %s and %s.\n", subject->name, child->name);
                 printf("Would you like to add %s as a prerequisite to %s (A) or remove the existing relationship (R)? [A/R]: ", subject->name, child->name);
-                scanf_s("%c", &choice);
+                scanf("%c", &choice);
 
                 if (choice == 'A' || choice == 'a') {
                     // 자식 과목의 부모 리스트에 현재 과목을 추가

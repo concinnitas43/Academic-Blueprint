@@ -48,13 +48,6 @@ void free_subject(Subject* subject) {
 }
 
 
-// Map 출력 함수
-void print_map(Map* map) {
-    for (int i = 0; i < map->size; i++) { // Map 크기만큼 반복
-        printf("%3d : %s, (%s)\n", map->subjects[i].id, map->subjects[i].name, map->subjects[i].tag); // 각 Subject 출력
-    }
-}
-
 // Subject Map 출력 함수 (선행 과목 출력)
 void print_subject_map(Subject* subject, int depth) {
     if (depth < 0 || subject == NULL) { // 깊이가 0보다 작거나 Subject가 NULL인 경우
