@@ -51,4 +51,11 @@ void saveload_screen(); // SAVEs and LOADs file
 
 void timetable_screen();
 
+// RELATED TO SCREEN
+void initialize_global_timetable();
+
+void view_timetable();
+void add_subject_timetable();
+void delete_subject_timetable();
+
 #endif

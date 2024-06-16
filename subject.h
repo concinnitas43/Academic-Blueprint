@@ -57,3 +57,4 @@ void load_map(Map* map, char* filename);
 void save_map(Map* map, char* filename);
 
 #endif
+

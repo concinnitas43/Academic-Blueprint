@@ -20,9 +20,8 @@ void free_timetable(Timetable* timetable);
 
 void print_subjects_in_semester(Timetable* timetable, int semester);
 
-int is_valid(int type1, Subject** subject); // Check if the timetable is valid(return 0) if not(return all error semesters(ex 2345))
+int is_valid(Timetable* timetable);
 int exceed_subjects(Timetable* timetable); //check if the timetable exceed the maximum number of subjects each semester(return 0) if not (return all exceeding semesters(ex 125))
 Subject** possible_semester(Timetable* timetable); // check if all subjects are possible to register at that semester(return None) if not (return the array of impossible subjects)
-
 
 #endif

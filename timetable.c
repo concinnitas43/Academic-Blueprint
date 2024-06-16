@@ -70,8 +70,18 @@ void print_subjects_in_semester(Timetable* timetable, int semester)
 {
     int a = (semester + 2) / 2;
     int b = 2 - (semester + 1) % 2;
-    printf("Subjects in %d-%d: ", a, b);
+    printf("Subjects in %d-%d: \n", a, b);
+    int tmp = 0;
     for (int i = 0; i < timetable->semesters[semester].size; i++) {
-        printf("%s\n", timetable->semesters[semester].subjects[i].name);
+        if (strcmp(timetable->semesters[semester].subjects[i].name, "") != 0)
+        {
+            printf("%s\n", timetable->semesters[semester].subjects[i].name);
+            tmp = 1;
+        }
+    }
+
+    if (tmp == 0)
+    {
+        printf("\n");
     }
 }

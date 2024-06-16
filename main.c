@@ -3,11 +3,17 @@
 enum STATE state = MAIN; // 실행 화면 결정 변수
 Map subject_map = {NULL, 0}; // 과목 정보 저장할 Map 변수
 
+Timetable timetable;
+
+
 int main(void)
 {
     printf("\n\nHello! This is the ACADEMIC BLUEPRINT.\n");
     printf("We manage subjects and their hierarchy!\n\n");
     printf("Please keep in mind that user input should be in integer form.\n");
+
+    initialize_global_timetable();
+
     while(1) // 메인 루프
     {
         switch (state)
@@ -61,6 +67,7 @@ void main_screen()
     printf("\tinput subject: 0\n");
     printf("\tsearch subject: 1\n");
     printf("\tsave & load: 2\n");
+    printf("\ttimetable related: 3\n");
     printf("\tend program: -1\n");
     printf("user input: ");
     int st=-1; // variable for menu select
@@ -75,6 +82,9 @@ void main_screen()
             break;
         case 2: // save & load
             state = SAVELOAD;
+            break;
+        case 3:
+            state = TIMETABLE;
             break;
         case -1: // end program
             state = -1;
@@ -212,7 +222,7 @@ Subject* select_screen()
     int sel_index = select_interface(index); // select_interface()를 호출하여 index select
 
     printf("%s selected.\n", subject_array[sel_index]->name);
-    state = INFO; // INFO로
+    // state = INFO; // INFO로
     return subject_array[sel_index]; // 선택한 subject 리턴
 } // > used in info_screen
 
@@ -476,8 +486,100 @@ void saveload_screen()
     return;
 }
 
+void initialize_global_timetable() {
+    for (int i = 0; i < NUM_SEMESTERS; i++) {
+        timetable.semesters[i].size = 10;  // Example size
+        timetable.semesters[i].subjects = (Subject*)malloc(timetable.semesters[i].size * sizeof(Subject));
+        
+        for (int j = 0; j < timetable.semesters[i].size; j++) {
+            timetable.semesters[i].subjects[j] = *create_subject("", "", -1);
+        }
+    }
+}
 
 
 void timetable_screen()
 {
+    printf("This is the timetable screen.\n");
+
+    printf("timetable screen menu:\n");
+    printf("\t0: view timetable\n"); // also view the validity
+    printf("\t1: add subject to timetable\n");
+    printf("\t2: delete subject from timetable\n");
+    printf("\t3: go back to main screen\n");
+
+    printf("user input: ");
+    int st=-1;
+    scanf("%d", &st);
+
+    switch(st)
+    {
+        case 0:
+            view_timetable();
+            break;
+        case 1:
+            add_subject_timetable();
+            break;
+        case 2:
+            delete_subject_timetable();
+            break;
+        default:
+            printf("loading main screen...\n");
+            state = MAIN;
+    }
+
+}
+
+void view_timetable()
+{
+    printf("This is the timetable\n");
+
+    for (int i = 0; i < NUM_SEMESTERS; i++) {
+        print_subjects_in_semester(&timetable, i);
+    }
+
+    if (is_valid(&timetable) == 1) {
+        printf("\nThe timetable is invalid\n");
+    } else {
+        printf("\nThe timetable is valid\n");
+    }
+
+}
+
+void add_subject_timetable()
+{
+    // use void append_to_timetable(Timetable* timetable, Subject* subject, int semester)
+    printf("This is the add subject to timetable\n");
+
+    printf("Semester to add: ");
+    int semester = -1;
+    scanf("%d", &semester);
+
+    Subject* subject = select_screen();
+    if (subject == NULL) {
+        return;
+    }
+
+    append_to_timetable(&timetable, subject, semester);
+
+    printf("Subject %s added to semester %d\n", subject->name, semester);
+}
+
+void delete_subject_timetable()
+{
+    // use void remove_from_timetable(Timetable* timetable, Subject* subject, int semester)
+    printf("This is the delete subject from timetable\n");
+
+    printf("Semester to delete: ");
+    int semester = -1;
+    scanf("%d", &semester);
+
+    Subject* subject = select_screen();
+    if (subject == NULL) {
+        return;
+    }
+
+    remove_from_timetable(&timetable, subject, semester);
+
+    printf("Subject %s deleted from semester %d\n", subject->name, semester);
 }
